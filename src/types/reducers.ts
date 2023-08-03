@@ -1,5 +1,9 @@
+import { User } from './mockapi'
+
 export interface ReducerData {
-    contents: string[]
+    contents: User[],
+    loading: boolean,
+    error: string,
 }
 
 export type ReduxActionData<T> = {
