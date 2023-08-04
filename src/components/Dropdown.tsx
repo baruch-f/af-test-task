@@ -6,17 +6,45 @@ import { User } from '../types/mockapi'
 import styled, { ThemeContext } from 'styled-components'
 import ProfileCard from './ProfileCard'
 
-type UserDropdownProps = {
-    className?: string;
-    style?: React.CSSProperties;
-};
+const AlertMessage = styled.div`
+      width: 100%;
+      text-align: center;
+      color: ${(props) => props.theme.colors.white100};
+    `;
 
-const UserDropdown: React.FC<UserDropdownProps> = (
-        {
-           className,
-           style,
-         }
-     ) => {
+const DropdownContainer = styled.div`
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      position: relative;
+    `;
+
+const DropdownButton = styled.button`
+      background: ${(props) => props.theme.colors.black600};
+      margin-top: 5px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border: none;
+      color: ${(props) => props.theme.colors.white100};
+    `;
+
+const DropdownMenu = styled.div`
+      background-color: ${(props) => props.theme.colors.black600};
+      display: flex;
+      flex-direction: column;
+      width: 150px;
+    `;
+
+const UserItem = styled.div<{ $isHovered: boolean }>`
+      display: block;
+      background-color: ${(props) => (props.$isHovered ? props.theme.colors.blue200 : 'transparent')};
+      color: ${(props) => props.theme.colors.white200};
+      font-size: 16px;
+      cursor: pointer;
+      padding: 10px;
+    `;
+
+const UserDropdown: React.FC = () => {
 
     const dispatch = useAppDispatch();
     const users = useAppSelector((state) => state.data.contents);
@@ -26,79 +54,68 @@ const UserDropdown: React.FC<UserDropdownProps> = (
 
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [selectedUser, setUser] = useState<User | null>(null);
-    const [hoveredUser, setHoveredUser] = useState<User | null>(null);
-    const dropdownRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const theme = useContext(ThemeContext);
 
-    const DropdownButton = styled.button`
-      background: ${(props) => props.theme.colors.black500};
-      border: none;
-      cursor: pointer;
-      color: ${(props) => props.theme.colors.white100};
-    `;
-
-    const DropdownMenu = styled.div`
-      background-color: ${(props) => props.theme.colors.black500};
-      width: 225px;
-    `;
-
-    const UserItem = styled.div<{ isHovered: boolean }>`
-      display: block;
-      border: none;
-      background-color: ${(props) => (props.isHovered ? props.theme.colors.blue100 : 'transparent')};
-      color: ${(props) => props.theme.colors.white200};
-      font-size: 16px;
-      cursor: pointer;
-      text-align: left;
-      padding: 8px 8px;
-    `;
-
     useEffect(() => {
-        dispatch(fetchContents());
+        ( async () => {
+            await dispatch(fetchContents());
+            buttonRef.current?.focus();
+        })();
     }, [dispatch]);
 
     useEffect(() => {
         if (isDropdownOpen) {
             menuRef.current?.focus();
+        } else {
+            buttonRef.current?.focus();
         }
     }, [isDropdownOpen]);
 
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev);
         setUser(null);
-        setHoveredUser(null);
     };
 
     const handleSelectUser = (user: User) => {
         setUser(user);
-        setHoveredUser(user);
     }
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        // some action :)
-    };
-
+    // enter key toggles select, up & down arrows for moving by rows
     const handleMenuKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        // some action :)
+        event.preventDefault();
+        if (event.key === 'Enter') {
+            toggleDropdown();
+        } else if (event.key === 'ArrowDown') {
+            if(!selectedUser) {
+                setUser(users[0]);
+            } else {
+                const nextIndex = +selectedUser.id + 1;
+                const nextUser = users.find(u => u.id === `${nextIndex}`);
+                if(nextUser) setUser(nextUser);
+            }
+        } else if (event.key === 'ArrowUp') {
+            if(!selectedUser) {
+                setUser(users[users.length - 1]);
+            } else {
+                const prevIndex = +selectedUser.id - 1;
+                const prevUser = users.find(u => u.id === `${prevIndex}`);
+                if (prevUser) setUser(prevUser);
+            }
+        }
     };
 
     if (loading) {
-        return <div>Loading...</div>
+        return <AlertMessage>Loading...</AlertMessage>
     }
 
     if (error) {
-        return <div>Error: {error}</div>
+        return <AlertMessage>Error: {error}</AlertMessage>
     }
 
     return (
-        <div
-            className={`user-dropdown ${className || ''}`}
-            style={style}
-            ref={dropdownRef}
-            onKeyDown={handleKeyDown}
-        >
+        <DropdownContainer onKeyDown={handleMenuKeyDown}>
             <DropdownButton
                 className="dropdown-button"
                 onClick={toggleDropdown}
@@ -116,14 +133,13 @@ const UserDropdown: React.FC<UserDropdownProps> = (
                     tabIndex={0}
                     role="menu"
                     aria-label="User List"
-                    onKeyDown={handleMenuKeyDown}
                 >
                     {users.map((user) => (
                         <UserItem
                             key={user.id}
                             className="user-item"
                             onClick={() => handleSelectUser(user)}
-                            isHovered={user === hoveredUser}
+                            $isHovered={user === selectedUser}
                         >
                             {user.name}
                         </UserItem>
@@ -132,7 +148,7 @@ const UserDropdown: React.FC<UserDropdownProps> = (
                 {selectedUser && <ProfileCard user={selectedUser} />}
                 </>
             )}
-        </div>
+        </DropdownContainer>
     );
 };
 
