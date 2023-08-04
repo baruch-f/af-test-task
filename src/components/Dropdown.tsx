@@ -33,6 +33,8 @@ const DropdownMenu = styled.div`
       display: flex;
       flex-direction: column;
       width: 150px;
+      height: 300px;
+      overflow: auto;
     `;
 
 const UserItem = styled.div<{ $isHovered: boolean }>`
@@ -56,6 +58,7 @@ const UserDropdown: React.FC = () => {
     const [selectedUser, setUser] = useState<User | null>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+    const itemsRef = useRef<HTMLDivElement[]>([]);
     const theme = useContext(ThemeContext);
 
     useEffect(() => {
@@ -93,7 +96,10 @@ const UserDropdown: React.FC = () => {
             } else {
                 const nextIndex = +selectedUser.id + 1;
                 const nextUser = users.find(u => u.id === `${nextIndex}`);
-                if(nextUser) setUser(nextUser);
+                if(nextUser) {
+                    setUser(nextUser);
+                    itemsRef.current[+nextUser.id].scrollIntoView();
+                }
             }
         } else if (event.key === 'ArrowUp') {
             if(!selectedUser) {
@@ -101,7 +107,10 @@ const UserDropdown: React.FC = () => {
             } else {
                 const prevIndex = +selectedUser.id - 1;
                 const prevUser = users.find(u => u.id === `${prevIndex}`);
-                if (prevUser) setUser(prevUser);
+                if (prevUser) {
+                    setUser(prevUser);
+                    itemsRef.current[+prevUser.id].scrollIntoView();
+                }
             }
         }
     };
@@ -139,6 +148,7 @@ const UserDropdown: React.FC = () => {
                             key={user.id}
                             className="user-item"
                             onClick={() => handleSelectUser(user)}
+                            ref={(el)=> {itemsRef.current[+user.id] = el!}}
                             $isHovered={user === selectedUser}
                         >
                             {user.name}

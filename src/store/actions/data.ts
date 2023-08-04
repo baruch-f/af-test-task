@@ -16,7 +16,7 @@ export const fetchContents = () => async (dispatch: AppDispatch) => {
         const response = await fetch('https://648b31ee17f1536d65ea9242.mockapi.io/users')
         const data: User[] = await response.json();
         if(data?.length) {
-            dispatch(setContents(data.slice(0, 5)));
+            dispatch(setContents(data));
         }
 
         dispatch(setLoading(false))
