@@ -25,7 +25,7 @@ const ProfileCard: React.FC<{ user: User }> = ({ user }) => {
 
     return (
         <UserCard>
-            <UserPic src={user.avatar} />
+            <UserPic src={user.avavar} />
             <h1>{user.name}</h1>
         </UserCard>
     );

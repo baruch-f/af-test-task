@@ -15,7 +15,7 @@ const HomePageBody = styled.div`
       background: ${(props) => props.theme.colors.black100};
       padding: 0 24px;
       margin: 0;
-      height: 100vh;
+      height: 98vh;
       display: flex;
       justify-content: center;
       align-items: center;

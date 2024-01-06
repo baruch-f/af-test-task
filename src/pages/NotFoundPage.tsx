@@ -5,9 +5,6 @@ import { ROUTES } from '../resources/routes-constants'
 const NotFoundPage: React.FC = () => {
     const navigate = useNavigate()
 
-    /**
-     * Call this function to redirect the user to the homepage.
-     */
     const redirectToHomePage = () => {
         navigate(ROUTES.HOMEPAGE_ROUTE)
     }

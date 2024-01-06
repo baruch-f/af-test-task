@@ -1,140 +1,45 @@
-<h1 align="center">New React App</h1>
+# Dropdown Component Project
 
-<br />
+## Overview
 
-This is a blank README file that you can customize at your needs.\
-Describe your project, how it works and how to contribute to it.
+This project aims to create a reusable dropdown component in React and TypeScript. The component fetches dropdown items from a provided API, displays user names, and renders a profile card on item click.
 
-<br />
+## Components
 
-# 🚀 Available Scripts
+### App Component
 
-In the project directory, you can run:
+The main entry point for the application. It sets up the Redux store, theme provider, and renders the `RootComponent`.
 
-<br />
+### RootComponent
 
-## ⚡️ start
+Defines the application routes using React Router. The default route renders the `NotFoundPage`, and the home route renders the `HomePage`.
 
-```
-npm start
-```
+### HomePage
 
-or
+Displays a dropdown component populated with user data fetched from the API. It utilizes the `Dropdown` component and the `ProfileCard` component.
 
-```
-yarn start
-```
+### Dropdown Component
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+A reusable dropdown component that fetches data from an API and renders a list of items. It also handles keyboard navigation for accessibility.
 
-<br />
+### UserDropdown Component
 
-## 🧪 test
+An extended version of the dropdown component specifically designed for user data. It includes keyboard navigation and user selection functionality.
 
-```
-npm test
-```
+### ProfileCard Component
 
-or
+Displays detailed information about a selected user. It includes the user's name and avatar.
 
-```
-yarn test
-```
+## Styling
 
-Launches the test runner in the interactive watch mode.
+The project uses styled-components for styling, with predefined theme variables provided.
 
-<br />
+## Testing
 
-## 🦾 build
+The code includes basic testing to demonstrate testing knowledge. Further testing can be implemented for production readiness.
 
-```
-npm build
-```
+## Considerations
 
-or
-
-```
-yarn build
-```
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.
-
-<br />
-
-## 🧶 lint
-
-```
-npm lint
-```
-
-or
-
-```
-yarn lint
-```
-
-Creates a `.eslintcache` file in which ESLint cache is stored. Running this command can dramatically improve ESLint's running time by ensuring that only changed files are linted.
-
-<br />
-
-## 🎯 format
-
-```
-npm format
-```
-
-or
-
-```
-yarn format
-```
-
-Checks if your files are formatted. This command will output a human-friendly message and a list of unformatted files, if any.
-
-<br />
-
-# 🧬 Project structure
-
-This is the structure of the files in the project:
-
-```sh
-    │
-    ├── public                  # public files (favicon, .htaccess, manifest, ...)
-    ├── src                     # source files
-    │   ├── components
-    │   ├── pages
-    │   ├── resources           # images, constants and other static resources
-    │   ├── store               # Redux store
-    │   │   ├── actions         # store's actions
-    │   │   └── reducers        # store's reducers
-    │   ├── styles
-    │   ├── tests               # all test files
-    │   ├── types               # data interfaces
-    │   ├── utility             # utilities functions and custom components
-    │   ├── App.tsx
-    │   ├── index.tsx
-    │   ├── react-app-env.d.ts
-    │   ├── RootComponent.tsx   # React component with all the routes
-    │   ├── serviceWorker.ts
-    │   └── setupTests.ts
-    ├── .eslintrc.js
-    ├── .gitignore
-    ├── .prettierrc
-    ├── package.json
-    ├── README.md
-    └── tsconfig.json
-```
-
-# 📖 Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-#
-
-<p align="center">Bootstrapped with Create React App.</p>
+- The component follows the provided design on page 3.
+- Accessibility is considered, with keyboard navigation for non-mouse users.
+- The code aims for composability over inheritance, promoting reusability.

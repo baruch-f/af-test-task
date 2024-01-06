@@ -45,6 +45,11 @@
     "@types/react-redux": "^7.1.25",
     "typescript": "^5.1.6"
   },
+  "overrides": {
+    "react-scripts": {
+      "typescript": "^5.1.6"
+    }
+  },
   "homepage": ".",
   "postcss": {
     "plugins": {
